@@ -1,4 +1,5 @@
 use std::path::PathBuf;
+use thiserror::Error;
 
 use clap::{ArgGroup, Parser};
 
@@ -45,4 +46,10 @@ pub fn stage_to_run_from_cli(cli: &Cli) -> StagesToRun {
     } else {
         StagesToRun::All
     }
+}
+
+#[derive(Debug, Error)]
+pub enum YaccError {
+    #[error("Invalid token found")]
+    InvalidToken,
 }

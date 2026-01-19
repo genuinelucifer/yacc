@@ -14,7 +14,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let stages = stage_to_run_from_cli(&cli);
     let filename = cli.filename;
 
-    let tokens = lexer::run()?;
+    let tokens = lexer::run(filename.clone())?;
     if stages < StagesToRun::Parser {
         return Ok(());
     }
