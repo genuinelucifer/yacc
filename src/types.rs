@@ -51,5 +51,34 @@ pub fn stage_to_run_from_cli(cli: &Cli) -> StagesToRun {
 #[derive(Debug, Error)]
 pub enum YaccError {
     #[error("Invalid token found")]
-    InvalidToken,
+    InvalidToken(String),
+}
+
+#[derive(Debug)]
+pub enum IdentifierTokens {
+    UserIdentifier(String),
+    Return,
+    Int,
+    Void,
+}
+
+#[derive(Debug)]
+pub enum ConstantTokens {
+    IntegerConstant(i32),
+}
+
+#[derive(Debug)]
+pub enum SymbolTokens {
+    LParen,
+    RParen,
+    LCurly,
+    RCurly,
+    SemiColon,
+}
+
+#[derive(Debug)]
+pub enum LexerTokens {
+    Identifier(IdentifierTokens),
+    Constant(ConstantTokens),
+    Symbol(SymbolTokens)
 }
