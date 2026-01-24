@@ -115,3 +115,26 @@ pub mod parsertypes {
     #[derive(Debug)]
     pub struct Program(pub FunctionSignature);
 }
+
+pub mod assemblytypes {
+    #[derive(Debug)]
+    pub enum Operand {
+        Imm(i32),
+        Register
+    }
+
+    #[derive(Debug)]
+    pub enum Instruction {
+        Mov(Operand, Operand),
+        Ret,
+    }
+
+    #[derive(Debug)]
+    pub struct FunctionDefinition {
+        pub name: String,
+        pub instructions: Vec<Instruction>,
+    }
+
+    #[derive(Debug)]
+    pub struct AssemblyProgram(pub FunctionDefinition);
+}

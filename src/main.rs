@@ -20,17 +20,17 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
     println!("Tokens Generated: {:?}", tokens);
 
-
     let ast = parser::run(tokens)?;
     if stages < StagesToRun::CodeGen {
         return Ok(());
     }
     println!("AST generated: {:?}", ast);
 
-    let _ = codegen::run()?;
+    let assembly = codegen::run(ast);
     if stages < StagesToRun::CodeEmission {
         return Ok(());
     }
+    println!("Assembly generated: {:?}", assembly);
 
     let _ = codeemission::run()?;
     if stages < StagesToRun::All {
