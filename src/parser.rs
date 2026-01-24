@@ -9,21 +9,25 @@ pub fn run(tokens: Vec<LexerTokens>) -> Result<Program, Box<dyn Error>> {
     let mut iter = tokens.into_iter();
     let function = parse_function(&mut iter)?;
 
+    // All the remaining program MUST be comments
+    while let Some(ntoken) = iter.next() {
+        match ntoken {
+            LexerTokens::LineComment(_) => continue,
+            _ => return Err(Box::new(YaccError::UnexpectedToken(ntoken))),
+        }
+    }
+
     Ok(Program(function))
 }
 
 fn expect_token(tk: LexerTokens, iter: &mut IntoIter<LexerTokens>) -> Result<(), Box<dyn Error>> {
     let ntoken = iter.next();
-    if ntoken.is_none() {
-        return Err(Box::new(YaccError::UnexpectedEnd))
+    match ntoken {
+        Some(ntoken) if ntoken == tk => Ok(()),
+        Some(LexerTokens::LineComment(_)) => expect_token(tk, iter),
+        Some(ntoken) => Err(Box::new(YaccError::UnexpectedToken(ntoken))),
+        None => Err(Box::new(YaccError::UnexpectedEnd)),
     }
-
-    let ntoken = ntoken.unwrap();
-    if ntoken != tk {
-        return Err(Box::new(YaccError::UnexpectedToken(ntoken)));
-    }
-
-    Ok(())
 }
 
 fn parse_function(iter: &mut IntoIter<LexerTokens>) -> Result<FunctionSignature, Box<dyn Error>> {

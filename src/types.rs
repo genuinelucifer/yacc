@@ -87,6 +87,7 @@ pub mod lexertypes {
     #[derive(Debug, PartialEq)]
     pub enum LexerTokens {
         Identifier(IdentifierTokens),
+        LineComment(String),
         Constant(ConstantTokens),
         Symbol(SymbolTokens)
     }
