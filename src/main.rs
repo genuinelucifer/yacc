@@ -12,7 +12,7 @@ mod parser;
 fn main() -> Result<(), Box<dyn Error>> {
     let cli = Cli::parse();
     let stages = stage_to_run_from_cli(&cli);
-    let filename = cli.filename;
+    let mut filename = cli.filename;
 
     let tokens = lexer::run(filename.clone())?;
     if stages < StagesToRun::Parser {
@@ -32,11 +32,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
     println!("Assembly generated: {:?}", assembly);
 
-    let _ = codeemission::run()?;
+    filename.set_extension("s");
+    codeemission::run(assembly, filename.clone())?;
     if stages < StagesToRun::All {
         return Ok(());
     }
-
-    println!("The filename is {filename:?} amd the stages are: {stages:?}");
+    println!("The assembly is written to {filename:?}");
     Ok(())
 }
