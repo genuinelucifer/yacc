@@ -52,33 +52,65 @@ pub fn stage_to_run_from_cli(cli: &Cli) -> StagesToRun {
 pub enum YaccError {
     #[error("Invalid token found")]
     InvalidToken(String),
+
+    #[error("Unexpected program end")]
+    UnexpectedEnd,
+
+    #[error("Expected a different token")]
+    UnexpectedToken(lexertypes::LexerTokens),
 }
 
-#[derive(Debug)]
-pub enum IdentifierTokens {
-    UserIdentifier(String),
-    Return,
-    Int,
-    Void,
+pub mod lexertypes {
+
+    #[derive(Debug, PartialEq)]
+    pub enum IdentifierTokens {
+        UserIdentifier(String),
+        Return,
+        Int,
+        Void,
+    }
+
+    #[derive(Debug, PartialEq)]
+    pub enum ConstantTokens {
+        IntegerConstant(i32),
+    }
+
+    #[derive(Debug, PartialEq)]
+    pub enum SymbolTokens {
+        LParen,
+        RParen,
+        LCurly,
+        RCurly,
+        SemiColon,
+    }
+
+    #[derive(Debug, PartialEq)]
+    pub enum LexerTokens {
+        Identifier(IdentifierTokens),
+        Constant(ConstantTokens),
+        Symbol(SymbolTokens)
+    }
+
 }
 
-#[derive(Debug)]
-pub enum ConstantTokens {
-    IntegerConstant(i32),
-}
+pub mod parsertypes {
+    #[derive(Debug)]
+    pub struct Constant(pub i32);
 
-#[derive(Debug)]
-pub enum SymbolTokens {
-    LParen,
-    RParen,
-    LCurly,
-    RCurly,
-    SemiColon,
-}
+    #[derive(Debug)]
+    pub struct Expression(pub Constant);
 
-#[derive(Debug)]
-pub enum LexerTokens {
-    Identifier(IdentifierTokens),
-    Constant(ConstantTokens),
-    Symbol(SymbolTokens)
+    #[derive(Debug)]
+    pub enum Statement {
+        ReturnStatement(Expression)
+    }
+
+    #[derive(Debug)]
+    pub struct FunctionSignature {
+        pub name: String,
+        pub body: Statement,
+    }
+
+    #[derive(Debug)]
+    pub struct Program(pub FunctionSignature);
 }

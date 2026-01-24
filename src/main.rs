@@ -18,13 +18,14 @@ fn main() -> Result<(), Box<dyn Error>> {
     if stages < StagesToRun::Parser {
         return Ok(());
     }
-    println!("Going to parse: {:?}", tokens);
+    println!("Tokens Generated: {:?}", tokens);
 
 
-    let _ = parser::run(tokens)?;
+    let ast = parser::run(tokens)?;
     if stages < StagesToRun::CodeGen {
         return Ok(());
     }
+    println!("AST generated: {:?}", ast);
 
     let _ = codegen::run()?;
     if stages < StagesToRun::CodeEmission {
