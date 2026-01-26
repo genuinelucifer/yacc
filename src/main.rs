@@ -1,5 +1,6 @@
 use clap::Parser;
 use std::error::Error;
+use std::process::Command;
 
 mod types;
 use types::{Cli, StagesToRun, stage_to_run_from_cli};
@@ -38,5 +39,13 @@ fn main() -> Result<(), Box<dyn Error>> {
         return Ok(());
     }
     println!("The assembly is written to {filename:?}");
+
+    // Run gcc to make an executable for the program
+    let mut executable = filename.clone();
+    executable.set_extension("");
+
+    // gcc $filename -o $executable
+    let _ = Command::new("gcc").args([filename.to_str().unwrap(), "-o", executable.to_str().unwrap()]).output()?;
+
     Ok(())
 }
