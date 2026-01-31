@@ -9,6 +9,7 @@ mod codeemission;
 mod codegen;
 mod lexer;
 mod parser;
+mod tacky;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let cli = Cli::parse();
@@ -23,11 +24,17 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let ast = parser::run(tokens)?;
     println!("AST generated: {:?}", ast);
+    if stages < StagesToRun::Tacky {
+        return Ok(());
+    }
+
+    let tacky = tacky::run(ast)?;
+    println!("Tacky generated: {:?}", tacky);
     if stages < StagesToRun::CodeGen {
         return Ok(());
     }
 
-    let assembly = codegen::run(ast);
+    let assembly = codegen::run(tacky);
     println!("Assembly generated: {:?}", assembly);
     if stages < StagesToRun::CodeEmission {
         return Ok(());

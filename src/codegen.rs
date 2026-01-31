@@ -20,6 +20,6 @@ fn parse_statement(stmt: Statement) -> Vec<Instruction> {
                 Instruction::Ret,
             ];
         },
-        _ => unimplemented!()
+        _ => unimplemented!("Codegen for this statement not implemented yet!")
     }
 }

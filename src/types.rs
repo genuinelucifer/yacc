@@ -6,7 +6,7 @@ use clap::{ArgGroup, Parser};
 #[derive(Parser, Debug)]
 #[command(group(
     ArgGroup::new("stage_group")
-        .args(["lex", "parse", "codegen", "assembly"])
+        .args(["lex", "parse", "tacky", "codegen", "assembly"])
 ))]
 pub struct Cli {
     // filename, required argument
@@ -17,6 +17,8 @@ pub struct Cli {
     lex: bool,
     #[arg(long)]
     parse: bool,
+    #[arg(long)]
+    tacky: bool,
     #[arg(long)]
     codegen: bool,
     #[arg(long)]
@@ -29,6 +31,7 @@ pub struct Cli {
 pub enum StagesToRun {
     Lexer,
     Parser,
+    Tacky,
     CodeGen,
     CodeEmission,
     All,
@@ -39,6 +42,8 @@ pub fn stage_to_run_from_cli(cli: &Cli) -> StagesToRun {
         StagesToRun::Lexer
     } else if cli.parse {
         StagesToRun::Parser
+    } else if cli.tacky {
+        StagesToRun::Tacky
     } else if cli.codegen {
         StagesToRun::CodeGen
     } else if cli.assembly {
@@ -124,6 +129,36 @@ pub mod parsertypes {
 
     #[derive(Debug)]
     pub struct Program(pub FunctionSignature);
+}
+
+pub mod tackytypes {
+    #[derive(Debug)]
+    pub enum TackyValue {
+        Constant(i32),
+        Variable(String),
+    }
+
+    #[derive(Debug)]
+    pub enum TackyUnaryOperator {
+        Complement,
+        Negation,
+    }
+
+    #[derive(Debug)]
+    pub enum TackyInstruction {
+        Return(TackyValue),
+        // Operator, src, dst
+        TackyUnary(TackyUnaryOperator, TackyValue, TackyValue),
+    }
+    
+    #[derive(Debug)]
+    pub struct TackyFunction {
+        pub name: String,
+        pub body: Vec<TackyInstruction>,
+    }
+
+    #[derive(Debug)]
+    pub struct TackyProgram(pub TackyFunction);
 }
 
 pub mod assemblytypes {
