@@ -100,10 +100,16 @@ pub mod lexertypes {
 
 pub mod parsertypes {
     #[derive(Debug)]
-    pub struct Constant(pub i32);
+    pub enum UnaryOperator {
+        Complement,
+        Negation,
+    }
 
     #[derive(Debug)]
-    pub struct Expression(pub Constant);
+    pub enum Expression {
+        Constant(i32),
+        UnaryExp(UnaryOperator, Box<Expression>),
+    }
 
     #[derive(Debug)]
     pub enum Statement {

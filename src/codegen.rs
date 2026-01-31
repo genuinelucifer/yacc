@@ -14,11 +14,12 @@ fn parse_function(function: FunctionSignature) -> FunctionDefinition {
 
 fn parse_statement(stmt: Statement) -> Vec<Instruction> {
     match stmt {
-        Statement::ReturnStatement(Expression(Constant(value))) => {
+        Statement::ReturnStatement(Expression::Constant(value)) => {
             return vec![
                 Instruction::Mov(Operand::Imm(value), Operand::Register),
                 Instruction::Ret,
             ];
-        }
+        },
+        _ => unimplemented!()
     }
 }

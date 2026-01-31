@@ -1,4 +1,4 @@
-int main() { // Comment
+int main(void) { // Comment
     return ~(-2);
  /* Multi line comments
   * Are also parsed correctly!
