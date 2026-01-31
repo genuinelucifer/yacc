@@ -11,10 +11,11 @@ pub fn run(filename: PathBuf) -> Result<Vec<LexerTokens>, Box<dyn Error>> {
     let regex = Regex::new(concat!(
         r"(?P<identifier>[a-zA-Z_]\w*\b)|",
         r"(?P<constant>[0-9]+\b)|",
-        r"(?P<symbol>[;\(\){}])|",
-        r"(?P<comment>//.*\n)|",
+        r"(?P<symbol>([;\(\){}~]|--|-))|",
+        r"(?P<comment>//.*\n?)|",
+        r"((?ms)(?P<multilinecomment>/\*.*\*/))|",
         r"(?P<whitespace>\s+)|",
-        r"(?P<error>.+\b)"))?;
+        r"(?P<error>[^\s\(\);{}]+)"))?;
 
     for result in regex.captures_iter(code_bytes) {
         let caps = result?;
@@ -33,6 +34,10 @@ pub fn run(filename: PathBuf) -> Result<Vec<LexerTokens>, Box<dyn Error>> {
             let comment = str::from_utf8(comment.as_bytes())?;
             tokens.push(LexerTokens::LineComment(comment.to_string()));
         }
+        else if let Some(comment) = caps.name("multilinecomment") {
+            let comment = str::from_utf8(comment.as_bytes())?;
+            tokens.push(LexerTokens::MultiLineComment(comment.to_string()));
+        }
         else if let Some(constant) = caps.name("constant") {
             let constant = str::from_utf8(constant.as_bytes())?;
             let value = constant.parse()?;
@@ -47,7 +52,10 @@ pub fn run(filename: PathBuf) -> Result<Vec<LexerTokens>, Box<dyn Error>> {
                 ")" => LexerTokens::Symbol(SymbolTokens::RParen),
                 "{" => LexerTokens::Symbol(SymbolTokens::LCurly),
                 "}" => LexerTokens::Symbol(SymbolTokens::RCurly),
-                _ => std::unreachable!(),
+                "--" => LexerTokens::Symbol(SymbolTokens::Decrement),
+                "-" => LexerTokens::Symbol(SymbolTokens::Negation),
+                "~" => LexerTokens::Symbol(SymbolTokens::Complement),
+                _ => std::unreachable!("Panic!"),
             };
             tokens.push(tk);
         }

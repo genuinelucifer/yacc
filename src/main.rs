@@ -16,29 +16,29 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut filename = cli.filename;
 
     let tokens = lexer::run(filename.clone())?;
+    println!("Tokens Generated: {:?}", tokens);
     if stages < StagesToRun::Parser {
         return Ok(());
     }
-    println!("Tokens Generated: {:?}", tokens);
 
     let ast = parser::run(tokens)?;
+    println!("AST generated: {:?}", ast);
     if stages < StagesToRun::CodeGen {
         return Ok(());
     }
-    println!("AST generated: {:?}", ast);
 
     let assembly = codegen::run(ast);
+    println!("Assembly generated: {:?}", assembly);
     if stages < StagesToRun::CodeEmission {
         return Ok(());
     }
-    println!("Assembly generated: {:?}", assembly);
 
     filename.set_extension("s");
     codeemission::run(assembly, filename.clone())?;
+    println!("The assembly is written to {filename:?}");
     if stages < StagesToRun::All {
         return Ok(());
     }
-    println!("The assembly is written to {filename:?}");
 
     // Run gcc to make an executable for the program
     let mut executable = filename.clone();

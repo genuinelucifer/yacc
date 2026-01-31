@@ -82,12 +82,16 @@ pub mod lexertypes {
         LCurly,
         RCurly,
         SemiColon,
+        Decrement,
+        Negation,
+        Complement,
     }
 
     #[derive(Debug, PartialEq)]
     pub enum LexerTokens {
         Identifier(IdentifierTokens),
         LineComment(String),
+        MultiLineComment(String),
         Constant(ConstantTokens),
         Symbol(SymbolTokens)
     }
