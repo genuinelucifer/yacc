@@ -132,7 +132,7 @@ pub mod parsertypes {
 }
 
 pub mod tackytypes {
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub enum TackyValue {
         Constant(i32),
         Variable(String),

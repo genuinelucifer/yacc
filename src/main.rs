@@ -33,7 +33,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     if stages < StagesToRun::CodeGen {
         return Ok(());
     }
-
+/*
     let assembly = codegen::run(tacky);
     println!("Assembly generated: {:?}", assembly);
     if stages < StagesToRun::CodeEmission {
@@ -53,6 +53,6 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // gcc $filename -o $executable
     let _ = Command::new("gcc").args([filename.to_str().unwrap(), "-o", executable.to_str().unwrap()]).output()?;
-
+*/
     Ok(())
 }
