@@ -84,7 +84,6 @@ fn parse_instruction(inst: TackyInstruction) -> Vec<Instruction> {
                 Instruction::Unary(tuop, dst),
             ];
         },
-        _ => unimplemented!("Cannot handle the instruction {inst:?} yet!")
     }
 }
 
