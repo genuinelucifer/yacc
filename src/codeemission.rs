@@ -1,3 +1,4 @@
+/*
 use std::{error::Error, fs::File, io::{BufWriter, Write}, path::PathBuf};
 
 use crate::types::assemblytypes::*;
@@ -66,3 +67,4 @@ fn write_operand(op: Operand, writer: &mut BufWriter<File>) -> Result<(), Box<dy
 
     Ok(())
 }
+*/

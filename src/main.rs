@@ -33,13 +33,14 @@ fn main() -> Result<(), Box<dyn Error>> {
     if stages < StagesToRun::CodeGen {
         return Ok(());
     }
-/*
+
     let assembly = codegen::run(tacky);
     println!("Assembly generated: {:?}", assembly);
     if stages < StagesToRun::CodeEmission {
         return Ok(());
     }
 
+    /*
     filename.set_extension("s");
     codeemission::run(assembly, filename.clone())?;
     println!("The assembly is written to {filename:?}");

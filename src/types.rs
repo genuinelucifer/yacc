@@ -162,15 +162,31 @@ pub mod tackytypes {
 }
 
 pub mod assemblytypes {
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
+    pub enum Register {
+        EAX,
+        R10D,
+    }
+
+    #[derive(Debug, Clone)]
     pub enum Operand {
         Imm(i32),
-        Register
+        Reg(Register),
+        Pseudo(String),
+        Stack(i32),
+    }
+
+    #[derive(Debug)]
+    pub enum AssemblyUnaryOperator {
+        Neg,
+        Not,
     }
 
     #[derive(Debug)]
     pub enum Instruction {
         Mov(Operand, Operand),
+        Unary(AssemblyUnaryOperator, Operand),
+        AllocateStack(i32),
         Ret,
     }
 
