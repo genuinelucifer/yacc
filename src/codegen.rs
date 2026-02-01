@@ -29,9 +29,9 @@ fn parse_function(function: TackyFunction) -> FunctionDefinition {
 fn fix_invalid_instructions(instructions: Vec<Instruction>, valid_insts: &mut Vec<Instruction>) {
     for inst in instructions {
         match inst {
-            Instruction::Mov(Operand::Pseudo(ps1), Operand::Pseudo(ps2)) => {
-                valid_insts.push(Instruction::Mov(Operand::Pseudo(ps1), Operand::Reg(Register::EAX)));
-                valid_insts.push(Instruction::Mov(Operand::Reg(Register::EAX), Operand::Pseudo(ps2)));
+            Instruction::Mov(Operand::Stack(off1), Operand::Stack(off2)) => {
+                valid_insts.push(Instruction::Mov(Operand::Stack(off1), Operand::Reg(Register::R10D)));
+                valid_insts.push(Instruction::Mov(Operand::Reg(Register::R10D), Operand::Stack(off2)));
             },
             _ => valid_insts.push(inst),
         }
@@ -76,8 +76,8 @@ fn parse_instruction(inst: TackyInstruction) -> Vec<Instruction> {
             let src = get_operand_from_value(src);
             let dst = get_operand_from_value(dst);
             let tuop = match tuop {
-                TackyUnaryOperator::Complement => AssemblyUnaryOperator::Neg,
-                TackyUnaryOperator::Negation => AssemblyUnaryOperator::Not,
+                TackyUnaryOperator::Complement => AssemblyUnaryOperator::Not,
+                TackyUnaryOperator::Negation => AssemblyUnaryOperator::Neg,
             };
             return vec![
                 Instruction::Mov(src, dst.clone()),

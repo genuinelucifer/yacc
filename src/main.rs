@@ -40,7 +40,6 @@ fn main() -> Result<(), Box<dyn Error>> {
         return Ok(());
     }
 
-    /*
     filename.set_extension("s");
     codeemission::run(assembly, filename.clone())?;
     println!("The assembly is written to {filename:?}");
@@ -54,6 +53,6 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // gcc $filename -o $executable
     let _ = Command::new("gcc").args([filename.to_str().unwrap(), "-o", executable.to_str().unwrap()]).output()?;
-*/
+
     Ok(())
 }

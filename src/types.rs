@@ -63,6 +63,9 @@ pub enum YaccError {
 
     #[error("Expected a different token")]
     UnexpectedToken(lexertypes::LexerTokens),
+
+    #[error("Unexpected assembly operand")]
+    InvalidAssemblyOperand(assemblytypes::Operand),
 }
 
 pub mod lexertypes {
